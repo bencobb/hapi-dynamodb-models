@@ -10,11 +10,9 @@ var Dummy = BaseModel.extend({
     }
 });
 
-
 Dummy.schema = Joi.object().keys({
     name: Joi.string().required(),
     hasHat: Joi.boolean()
 });
-
 
 module.exports = Dummy;

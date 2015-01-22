@@ -1,6 +1,16 @@
+var AWS = require('aws-sdk');
+var cwd     = process.cwd();
+var wd      = __dirname;
+var dir     = wd.replace(cwd, '');
+
 module.exports = {
-    mongodb: {
-        url: 'mongodb://localhost:27017/hapi-mongo-models-test',
-        settings: {}
+    dynamodb: {
+        //running on local dynamodb
+        endpoint: new AWS.Endpoint('http://127.0.0.1:7999'),
+        region: 'us-east-1'
+    },
+    models: {
+        DummyData: dir + '/fixtures/dummy-model'
     }
+
 };

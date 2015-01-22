@@ -1,43 +1,26 @@
 var Path = require('path');
+var Hoek = require('hoek');
 var BaseModel = require('./lib/base-model');
 
-
 exports.register = function (server, options, next) {
+    'use strict';
+    Hoek.assert(options, 'Missing options');
+    Hoek.assert(options.dynamodb, 'Missing options.dynamodb');
+    Hoek.assert(options.models, 'Missing options.models');
 
-    var models = options.models || {};
-    var mongodb = options.mongodb;
-    var autoIndex = options.hasOwnProperty('autoIndex') ? options.autoIndex : true;
-
-    Object.keys(models).forEach(function (key) {
-
-        models[key] = require(Path.join(process.cwd(), models[key]));
+    Object.keys(options.models).forEach(function (key) {
+        options.models[key] = require(Path.join(process.cwd(), options.models[key]));
+        server.expose(key, options.models[key]);
     });
 
-    BaseModel.connect(mongodb, function (err, db) {
+    BaseModel.init(options.dynamodb);
 
-        if (err) {
-            server.log('Error connecting to MongoDB via BaseModel.');
-            return next(err);
-        }
+    server.expose('BaseModel', BaseModel);
 
-        Object.keys(models).forEach(function (key) {
-
-            if (autoIndex) {
-                models[key].ensureIndexes();
-            }
-
-            server.expose(key, models[key]);
-        });
-
-        server.expose('BaseModel', BaseModel);
-
-        next();
-    });
+    next();
 };
 
-
 exports.BaseModel = BaseModel;
-
 
 exports.register.attributes = {
     pkg: require('./package.json')
