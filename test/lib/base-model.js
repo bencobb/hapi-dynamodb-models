@@ -1,12 +1,9 @@
-var Async = require('async');
 var Joi = require('joi');
 var Lab = require('lab');
 var Code = require('code');
 var ObjectAssign = require('object-assign');
 var Proxyquire = require('proxyquire');
 var Config = require('../config');
-var Q = require('q');
-
 
 var lab = exports.lab = Lab.script();
 var stub = {
@@ -15,9 +12,6 @@ var stub = {
 var BaseModel = Proxyquire('../../lib/base-model', {
     dynamodb: stub.dynamodb
 });
-
-
-
 
 lab.experiment('BaseModel Validation', function () {
 
@@ -142,4 +136,3 @@ lab.experiment('BaseModel Proxied Methods', function () {
         });
     });
 });
-
