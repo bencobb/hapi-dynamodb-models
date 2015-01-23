@@ -2,3 +2,4 @@ node_modules
 test/artifacts/*
 .idea/
 dynamodb_local
+npm-debug.log
